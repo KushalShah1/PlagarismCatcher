@@ -1,0 +1,3 @@
+C:/Users/kusha/Desktop/312/Plagarism Catcher/cmake-build-debug/CMakeFiles/Plagarism_Catcher.dir
+C:/Users/kusha/Desktop/312/Plagarism Catcher/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/kusha/Desktop/312/Plagarism Catcher/cmake-build-debug/CMakeFiles/rebuild_cache.dir

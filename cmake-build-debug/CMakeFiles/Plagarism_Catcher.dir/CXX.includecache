@@ -1,0 +1,38 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/kusha/Desktop/312/Plagarism Catcher/HashTable.h
+vector
+-
+cstdlib
+-
+string
+-
+
+C:/Users/kusha/Desktop/312/Plagarism Catcher/main.cpp
+sys/types.h
+-
+dirent.h
+-
+errno.h
+-
+vector
+-
+string
+-
+iostream
+-
+fstream
+-
+algorithm
+-
+HashTable.h
+C:/Users/kusha/Desktop/312/Plagarism Catcher/HashTable.h
+chrono
+-
+
