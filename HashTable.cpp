@@ -18,7 +18,7 @@ long HashTable::hashFunction(std::string &key) {
     int i=0;
 
     for(const char &c:key){
-        temp+=((c-'a'+1)*(37^i));
+        temp+=((c-'a'+1)*(7^i));
         temp%=LONG_MAX;
         i++;
     }

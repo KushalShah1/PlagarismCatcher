@@ -37,31 +37,31 @@ bool compareWorstCheaters(const Worst &a, const Worst &b ){
     return a.data > b.data;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-    auto start = std::chrono::high_resolution_clock::now();
-    string dir = string("..\\med_doc_set");
+    string dir = string(argv[1]);
+    //string dir = string("../med_doc_set");
+
     vector<string> files = vector<string>();
-    int nWordSequence=6;
+    int nWordSequence=stoi(argv[2]);
+    //int nWordSequence=20;
+
     getdir(dir,files);
-    files.erase(files.begin(),files.begin()+2);
-    HashTable cheaters(files.size()*2000);
+    files.erase(files.begin(),files.begin()+2);//deletes "." and ".."
+    HashTable cheaters(524287);//Big prime number
 
     int **similarities = new int*[files.size()];
     for(int i = 0; i < files.size(); ++i) {
         similarities[i] = new int[files.size()];
-    }
-    for(int i=0;i<files.size();i++){
         for(int j=0;j<files.size();j++){
             similarities[i][j]=0;
         }
     }
 
 
-    string *contents= new string[nWordSequence];
     for (int fileIndex=0;fileIndex<files.size();fileIndex++) {
         ifstream myfile;
-        myfile.open(dir + "\\" + files[fileIndex]);
+        myfile.open(dir + "\\" + files.at(fileIndex));
 
         string word;
 
@@ -69,30 +69,37 @@ int main()
         int currentReadIndex=0;
         string sequence="";
         if(myfile.is_open()) {
+            string *contents= new string[nWordSequence];
+
             while (myfile >> word) {
                 contents[insertIndex] = word;
+                currentReadIndex = (insertIndex+nWordSequence) % nWordSequence;
                 insertIndex = (insertIndex + 1) % nWordSequence;
 
-                currentReadIndex = (insertIndex + 1) % nWordSequence;
                 sequence = "";
+                int tempIndex=currentReadIndex;
                 for (int i = 0; i < nWordSequence; i++) {
-                    sequence += contents[currentReadIndex];
-                    currentReadIndex = (currentReadIndex + 1) % nWordSequence;
+                    sequence += contents[tempIndex];
+                    tempIndex = (tempIndex + 1) % nWordSequence;
                 }
                 vector<int> collisions = cheaters.insert(sequence, fileIndex);
-                if(collisions.size()>1) {
+                collisions.erase( unique( collisions.begin(), collisions.end() ), collisions.end() );
+                if(collisions.size()>0) {
                     for (int x:collisions) {
                         similarities[fileIndex][x]++;
                     }
                 }
             }
+            delete[](contents);
+
         }
     }
     vector<Worst> topCheaters;
     for(int i=0;i<files.size();i++){
         for(int j=0;j<i;j++){
-            if(similarities[i][j]>400)
-                topCheaters.push_back({files.at(i),files.at(j),similarities[i][j]});
+            if(similarities[i][j]>200) {
+                topCheaters.push_back({files.at(i), files.at(j), similarities[i][j]});
+            }
         }
     }
 
@@ -102,13 +109,11 @@ int main()
         cout<<topCheaters.at(i).data<<" : "<<topCheaters.at(i).filename1<<", "<<topCheaters.at(i).filename2<<endl;
     }
 
+
+
     for(int i = 0; i < files.size(); ++i) {
         delete []similarities[i];
     }
     delete [] similarities;
-    delete[](contents);
-    auto stop = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-    cout << duration.count() << endl;
     return 0;
 }
